@@ -68,8 +68,7 @@ option1 <- microdata |>
         fecha_det = ifelse(
             !det_year_unspec & !det_month_unspec & !det_day_unspec,
             as.character(make_date(det_year, det_month, det_day)),
-            NA_character_
-        ),
+            NA_character_),
         fecha_det = as.Date(fecha_det),
         
         # Fecha de sentencia:
@@ -81,9 +80,9 @@ option1 <- microdata |>
         ),
         fecha_sent = as.Date(fecha_sent),
         
-        # Fecha de entrevista fija en el punto medio del levantamiento
-        fecha_encuesta = as.Date("2021-07-05")
-    ) |>
+        # Fecha de entrevista fija en el final del intervalo de levantamiento (para evitar negativos)
+        fecha_encuesta = as.Date("2021-07-26")) |>
+    
     mutate(
         # Tiempo total en prisión
         dias_det = as.numeric(fecha_encuesta - fecha_det),
@@ -91,17 +90,16 @@ option1 <- microdata |>
         
         # Tiempo en prisión sin sentencia
         dias_sent = as.numeric(fecha_sent - fecha_det),
-        anos_sent = dias_sent / 365
-    ) |>
+        anos_sent = dias_sent / 365) |>
     # Se usa otra pregunta para ver si la persona ha recibido o no sentencia al momento de la entrevista. Si no, el tiemop sin sentencia es igual al total del tiempo en prisión.
     mutate(anos_sent = case_when(
         status == 1 ~ anos_det,
         status %in% c(2, 3) ~ anos_sent)) |>
     
     mutate(
-        # Protección ante negativos
-        anos_det = ifelse(!is.na(anos_det)  & anos_det  < 0, 0, anos_det),
-        anos_sent = ifelse(!is.na(anos_sent) & anos_sent < 0, 0, anos_sent),
+        # Doble protección ante negativos
+        anos_det = ifelse(!is.na(anos_det)  & anos_det  < 0, 1/365, anos_det),
+        anos_sent = ifelse(!is.na(anos_sent) & anos_sent < 0, 1/365, anos_sent),
         
         # Años completos
         anos_det_floor  = ifelse(!is.na(anos_det), 
