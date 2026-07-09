@@ -2,13 +2,14 @@
 
 # Packages
 library(dplyr)
+library(ggplot2)
 library(janitor)
 library(lubridate)
+library(tidyr)
+
 
 # Data from (See "R/0 Tabular merge and item selection.R")
 load("in/data.RData")
-
-
 
 # Revisión de no especificados en detención
 na_detention <- tibble(
@@ -109,8 +110,6 @@ option1 <- microdata |>
 
 
 # Plots
-library(ggplot2)
-library(tidyr)
 names(option1)
 
 density_plot <- option1 |>
@@ -134,6 +133,7 @@ density_plot <- option1 |>
     labs(x = "Years in prison", 
          y = "Population")+
     theme(legend.position = "none")
+
 
 na <- rbind(
 option1 |> 
@@ -176,5 +176,5 @@ bar_plot <- na |>
 library(patchwork)
 bar_plot+density_plot+plot_layout(widths = c(.6,1))
 
-ggsave("out/1.Valid responses and distribution.jpg",
+ggsave("out/1_valid_responses_distribution.jpg",
        scale = 1, height = 4, width = 9, dpi = 300)

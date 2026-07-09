@@ -10,7 +10,16 @@ library(lubridate)
 
 load("~/Documents/Data/Prisons/ENPOL RData/BD_ENPOL_2021.RData")
 
-# Detention time variables
+
+# Reported discrete time in prison (used for validation):
+enpol_det1 <- ENPOL2021_SOC |>
+    clean_names() |>
+    select(
+        id_per,
+        time_cat = p1_1a 
+        )
+
+# Detention date and survey weights
 enpol_det <- ENPOL2021_2_3 |>
     clean_names() |>
     select(
@@ -25,11 +34,14 @@ enpol_det <- ENPOL2021_2_3 |>
     mutate(
         det_year = as.numeric(det_year),
         det_month = as.numeric(det_month),
-        det_day = as.numeric(det_day)
+        det_day = as.numeric(det_day),
+        fac_per = as.numeric(fac_per)
     )
 
+enpol_det <- enpol_det |>
+    left_join(enpol_det1, by = "id_per")
 
-# Sentence date variables
+# Sentencing date and legal status
 enpol_sent <- ENPOL2021_5 |>
     clean_names() |>
     select(
@@ -46,6 +58,7 @@ enpol_sent <- ENPOL2021_5 |>
 # Merge
 microdata <- enpol_det |>
     left_join(enpol_sent, by = "id_per")
+
 
 # Interview possible dates -------------------------------------------
 survey_dates <- seq(
