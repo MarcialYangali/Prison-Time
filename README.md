@@ -13,13 +13,13 @@ Despite its importance, continuous measures of prison time are rarely available 
 
 These variables have multiple applications. In my own work they have been used to study demographic and spatial inequalities in pretrial detention[^readme-1] and to reconstruct retrospective environmental exposure histories inside prisons[^readme-2]. More generally, however, the purpose of this repository is methodological: to document how these temporal variables are constructed, validated, and prepared for subsequent analyses.
 
-[^readme-1]: **Yangali, Marcial** & García-Guerrero, V. M. (2026). Years of life lost in prison without sentencing: Analysis of legal and sociodemographic factors in Mexico. Population Research and Policy Review, 45, Article 36. <https://doi.org/10.1007/s11113-026-10021-7>
+[^readme-1]: **Yangali, Marcial** & García-Guerrero, V. M. (2026). Years of life lost in prison without sentencing: Analysis of legal and sociodemographic factors in Mexico. *Population Research and Policy Review*, 45, Article 36. <https://doi.org/10.1007/s11113-026-10021-7>
 
-    Yangali (2026) "Pretrial Detention 2"
+    **Yangali, Marcial** & Baptista E. “Punishment through delay: Institutional inequality and time without sentencing in Mexico.” (Manuscript under review)
 
-    Yangali (2024) "Pretrial Detention 0" Thesis
+    **Yangali, Marcial** (2024) "Heterogeneidad y desigualdad en las prisiones mexicanas: una aproximación demográfica a la cohorte sintética de 2021" Thesis available on El Colegio de México [repository](https://repositorio.colmex.mx/concern/theses/p26770360?f%5Bgeographic_coverage_sim%5D%5B%5D=M%C3%A9xico&locale=en&page=4).
 
-[^readme-2]: Yangali (2026) "Heat stress behind bars". (Work in progress)
+[^readme-2]: **Yangali, Marcial**; Sánchez L. & Baptista E. “Heat Stress Behind Bars: Infrastructural, Biological, and Institutional Vulnerabilities in Mexico”. (Work in progress)
 
 For sentenced individuals, the survey also records the reported length of the prison sentence imposed by the judge. Although this measure is potentially useful for estimating future incarceration time, it is substantially more uncertain than the reconstructed temporal intervals because the effective duration of imprisonment may subsequently change through sentence reductions, new convictions, or other legal mechanisms.
 
@@ -67,36 +67,18 @@ This complete-case strategy is useful as a baseline because it avoids imputation
 
 ![](out/1_valid_responses_distribution.jpg)
 
-> Under this approach, 93.3% of individuals have enough information to estimate time in prison, while 75.4% have enough information to estimate time without sentencing. The average estimated time in prison is 5.78 years, compared with 2.20 years without sentencing. The distributions show that both intervals are concentrated in the first years of incarceration, although time without sentencing is more strongly concentrated between 0 and 3 years.
+> Under this approach, 93.3% of individuals have enough information to estimate time in prison, while 75.4% have enough information to estimate time without sentencing. Missing values concentrate in smaller time scales such days for detention date and months for sentence dates.
 
 ## 2 Simple random day imputation
 
-\- imputar aleatoriamente mes/día no especificados
+![](out/2_valid_responses_distribution.jpg)
 
-\- mantener año no especificado como NA
+> Under this approach, time in prison information increase to 98.6%, +5.3 more. And for time without sentencing it goes up to 91%, +15.6 of information retrieve by random imputation. The average estimated time in prison is 5.75 years, compared with 2.20 years without sentencing. The distributions show that both intervals are concentrated in the first years of incarceration, although time without sentencing is more strongly concentrated between 0 and 3 years. In addition, time without a sentence has negative values due to sentence previous incarceration.
 
 ## 3 Uncertainty propagation with multiple imputation
 
-Idea:
-
-Generar m bases imputadas.
-
-En cada base:
-
-\* mes/día de detención no especificados se imputan aleatoriamente.
-
-\* día de sentencia se imputa aleatoriamente dentro del mes.
-
-\* mes de sentencia no especificado se imputa aleatoriamente.
-
-\* fecha de entrevista se asigna aleatoriamente dentro del levantamiento.
-
-```{r}
-
-```
+[Script ready, description pending]
 
 ## 4 Validation against discrete measures
 
-Use discrete variable
-
-1.1a ¿Cuánto tiempo tiene privado de su libertad? (Desde su ingreso a un centro penitenciario hasta el momento de la entrevista)
+[Pending]

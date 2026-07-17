@@ -35,21 +35,6 @@ na_sentence <- tibble(
 
 na_sentence
 
-rbind(na_detention, na_sentence) |> 
-    ggplot()+
-    aes(x = percentage, y = date)+
-    geom_col(fill = "black")+
-    geom_text(aes(x = percentage +1, label = na),
-              size = 3) +
-    facet_wrap(~interval, ncol = 2)+
-    scale_x_continuous(
-        # limits = c(0, 100),
-        breaks = seq(0,100,5),
-        labels = paste0(seq(0,100,5), "%")
-    )+
-    theme_bw()+
-    labs(y = NULL,
-         x = NULL)
 
 
 # Cálculo 1
@@ -126,9 +111,7 @@ density_plot <- option1 |>
         "darkred", "darkgreen"))+
     scale_color_manual(values = c(
         "darkred", "darkgreen"))+
-    scale_x_continuous(
-        breaks = seq(0,50,5)
-    )+
+    scale_x_continuous(breaks = seq(0,50,5))+
     theme_bw()+
     labs(x = "Years in prison", 
          y = "Population")+
@@ -169,12 +152,48 @@ bar_plot <- na |>
         breaks = seq(0,100,25),
         labels = paste0(seq(0,100,25), "%")
     )+
-    labs(y = "Valid Responses", x = NULL)+
+    labs(y = NULL, subtitle = "Valid Responses", x = NULL)+
     theme_bw()+
     theme(legend.position = "none")
 
 library(patchwork)
 bar_plot+density_plot+plot_layout(widths = c(.6,1))
+
+# ggsave("out/1_valid_responses_distribution.jpg",
+#        scale = 1, height = 4, width = 9, dpi = 300)
+
+
+size_na <- rbind(na_detention, na_sentence) |> 
+    mutate(date = case_when(
+        date == "year" ~ "Year",
+        date == "month" ~ "Month",
+        date == "day" ~ "Day"
+    )) |> 
+    ggplot()+
+    aes(x = percentage, y = date)+
+    geom_col(aes(fill = interval,
+                 color = interval), alpha = .8)+
+    geom_text(aes(x = percentage +1, label = na),
+              size = 2.7) +
+    facet_wrap(~interval, ncol = 1, scale = "free_y", 
+               strip.position = "right")+
+    scale_x_continuous(
+        # limits = c(0, 100),
+        breaks = seq(0,100,5),
+        labels = paste0(seq(0,100,5), "%")
+    )+
+    scale_fill_manual(values = c(
+        "darkred", "darkgreen"))+
+    scale_color_manual(values = c(
+        "darkred", "darkgreen"))+
+    theme_bw()+
+    labs(y = NULL,
+         x = NULL,
+         subtitle = "Where and how much NAs")+
+    theme(strip.background = element_rect(fill = "white"), 
+          legend.position = "none")
+
+bar_plot+size_na+plot_layout(widths = c(.52,1))
 
 ggsave("out/1_valid_responses_distribution.jpg",
        scale = 1, height = 4, width = 9, dpi = 300)
